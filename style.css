@@ -1,0 +1,28 @@
+/* style.css */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* สมมติว่ามี 5 คอลัมน์ */
+    gap: 15px;
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.seat {
+    width: 60px;
+    height: 60px;
+    background-color: #2ecc71; /* สีเขียว = ว่าง */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+}
+
+.seat.taken {
+    background-color: #e74c3c; /* สีแดง = จองแล้ว */
+    cursor: not-allowed;
+}
+
+.seat.selected {
+    border: 3px solid #f1c40f; /* สีเหลือง = กำลังเลือก */
+}
