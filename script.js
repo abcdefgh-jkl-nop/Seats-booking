@@ -1,18 +1,33 @@
-// script.js
+const scriptURL = 'https://script.google.com/macros/s/AKfycbwwoofCO-EJFkBxQyTjrj_IscT5HliIoYIeduo3afIcVUcbzXRzpzLxh2Lnwh6zbo_a/exec'; 
+
 const container = document.getElementById('classroom-map');
 let selectedSeat = null;
 
-// สร้างที่นั่ง 25 ที่
+// 1. ดึงข้อมูลการจองที่มีอยู่แล้วมาแสดงผล (Sync ข้อมูล)
+function loadSeats() {
+    fetch(scriptURL)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(row => {
+                const seatBtn = document.getElementById('seat-' + row[0]);
+                if (seatBtn) {
+                    seatBtn.classList.add('taken');
+                    seatBtn.innerText = row[1]; // แสดงชื่อคนจองบนที่นั่ง
+                }
+            });
+        });
+}
+
+// 2. สร้างที่นั่ง 25 ที่
 for (let i = 1; i <= 25; i++) {
     const seat = document.createElement('button');
     seat.innerText = i;
+    seat.id = 'seat-' + i;
     seat.classList.add('seat');
     
     seat.onclick = () => {
         if (!seat.classList.contains('taken')) {
-            // เคลียร์การเลือกอันเก่า
             if (selectedSeat) selectedSeat.classList.remove('selected');
-            // เลือกอันใหม่
             seat.classList.add('selected');
             selectedSeat = seat;
         }
@@ -20,13 +35,26 @@ for (let i = 1; i <= 25; i++) {
     container.appendChild(seat);
 }
 
+// เรียกโหลดข้อมูลตอนเปิดหน้าเว็บ
+loadSeats();
+
+// 3. ฟังก์ชันกดยืนยันการจอง
 function confirmBooking() {
     const name = document.getElementById('student-name').value;
     if (selectedSeat && name) {
-        alert(`ยืนยันการจองที่นั่งที่ ${selectedSeat.innerText} ให้คุณ ${name}`);
-        selectedSeat.classList.add('taken');
-        selectedSeat.classList.remove('selected');
-        // ตรงนี้ต้องส่งข้อมูลไปเก็บใน Database (ดูขั้นตอนถัดไป)
+        const seatNumber = selectedSeat.innerText;
+        
+        // ส่งข้อมูลไปที่ Google Sheets
+        fetch(scriptURL, {
+            method: 'POST',
+            body: JSON.stringify({ seat: seatNumber, name: name })
+        })
+        .then(() => {
+            alert('จองสำเร็จ! ข้อมูลบันทึกลง Google Sheets แล้ว');
+            location.reload(); // รีเฟรชหน้าเพื่ออัปเดตสถานะ
+        })
+        .catch(error => console.error('Error!', error.message));
+        
     } else {
         alert('กรุณาเลือกที่นั่งและใส่ชื่อด้วยครับ');
     }
