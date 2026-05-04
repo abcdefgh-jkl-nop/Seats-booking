@@ -4,53 +4,68 @@ let selectedSeat = null;
 
 function createSeats() {
     container.innerHTML = ''; 
-    
-    // ฟังก์ชันช่วยสร้างปุ่ม
-    function addSeat(id) {
-        const seat = document.createElement('button');
-        seat.innerText = id;
-        seat.id = 'seat-' + id;
-        seat.classList.add('seat');
-        seat.onclick = () => {
-            if (!seat.classList.contains('taken')) {
-                if (selectedSeat) selectedSeat.classList.remove('selected');
-                seat.classList.add('selected');
-                selectedSeat = seat;
-            }
-        };
-        container.appendChild(seat);
-    }
-
-    // ฟังก์ชันช่วยสร้างช่องว่าง (ทางเดิน)
-    function addAisle() {
-        const aisle = document.createElement('div');
-        aisle.classList.add('aisle');
-        container.appendChild(aisle);
-    }
-
-    // --- แถวที่ 1 (3-3-3-3) ---
     let seatNum = 1;
-    for (let group = 1; group <= 4; group++) {
-        for (let s = 1; s <= 3; s++) { addSeat(seatNum++); }
-        if (group < 4) addAisle(); // เว้นทางเดินยกเว้นกลุ่มสุดท้าย
-    }
 
-    // --- แถวที่ 2-4 (2-2-2-2) ---
-    for (let row = 1; row <= 3; row++) {
-        for (let group = 1; group <= 4; group++) {
-            // สร้างที่นั่ง 2 ตัว
-            for (let s = 1; s <= 2; s++) { addSeat(seatNum++); }
-            // สร้างที่ว่างหลอกๆ 1 ตัว (เพื่อให้ทางเดินตรงกับแถวบน)
-            const spacer = document.createElement('div');
-            spacer.style.width = '50px'; // เท่ากับความกว้างที่นั่ง
-            container.appendChild(spacer);
-            
-            if (group < 4) addAisle();
+    // สร้างทั้งหมด 4 แถวแนวนอนตามรูปวาด
+    for (let r = 1; r <= 4; r++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.style.display = 'flex';
+        rowDiv.style.justifyContent = 'center';
+        rowDiv.style.marginBottom = '15px'; // ระยะห่างระหว่างแถวหน้า-หลัง
+        rowDiv.style.width = '100%';
+
+        // ใน 1 แถวแนวนอน มี 4 กลุ่มหน้ากระดาน
+        for (let g = 1; g <= 4; g++) {
+            const groupDiv = document.createElement('div');
+            groupDiv.style.display = 'flex';
+            groupDiv.style.marginRight = (g < 4) ? '40px' : '0'; // ทางเดินระหว่างกลุ่ม
+
+            // เงื่อนไข: ถ้ากลุ่มที่ 1 (ซ้ายสุด) ให้มี 3 ที่นั่ง นอกนั้น 2 ที่นั่ง
+            let seatsInGroup = (g === 1) ? 3 : 2;
+
+            for (let s = 1; s <= seatsInGroup; s++) {
+                const seat = document.createElement('button');
+                seat.innerText = seatNum;
+                seat.id = 'seat-' + seatNum;
+                seat.classList.add('seat');
+                seat.onclick = () => {
+                    if (!seat.classList.contains('taken')) {
+                        if (selectedSeat) selectedSeat.classList.remove('selected');
+                        seat.classList.add('selected');
+                        selectedSeat = seat;
+                    }
+                };
+                groupDiv.appendChild(seat);
+                seatNum++;
+            }
+            rowDiv.appendChild(groupDiv);
         }
+        container.appendChild(rowDiv);
     }
 }
 
-// ... ส่วนฟังก์ชัน loadSeats และ confirmBooking ก๊อปของเดิมมาวางต่อท้ายได้เลยครับ ...
+// ฟังก์ชัน loadSeats และ confirmBooking (เหมือนเดิม)
+function loadSeats() {
+    fetch(scriptURL).then(res => res.json()).then(data => {
+        data.forEach(row => {
+            const seatBtn = document.getElementById('seat-' + row[0]);
+            if (seatBtn) {
+                seatBtn.classList.add('taken');
+                seatBtn.innerText = row[1];
+                seatBtn.style.fontSize = '10px';
+            }
+        });
+    });
+}
+
+function confirmBooking() {
+    const name = document.getElementById('student-name').value;
+    if (selectedSeat && name) {
+        const seatNumber = selectedSeat.id.replace('seat-', '');
+        fetch(scriptURL, { method: 'POST', body: JSON.stringify({ seat: seatNumber, name: name }) })
+        .then(() => { alert('จองสำเร็จ!'); location.reload(); });
+    } else { alert('กรุณาเลือกที่นั่งและใส่ชื่อครับ'); }
+}
+
 createSeats();
 loadSeats();
-
