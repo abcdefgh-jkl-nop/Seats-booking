@@ -1,44 +1,26 @@
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f4f4f9;
-}
-
 #classroom-map {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    max-width: 650px; /* ปรับขนาดความกว้างรวมของห้อง */
+    max-width: 750px; /* ปรับให้พอดีกับ 12 ช่อง */
     margin: 20px auto;
     justify-content: center;
 }
 
 .seat {
-    width: 45px;
-    height: 45px;
-    margin: 5px;
+    width: 50px;
+    height: 50px;
+    margin: 3px;
     border: none;
     border-radius: 5px;
     background-color: #2ecc71;
     color: white;
     cursor: pointer;
-    font-size: 12px;
 }
 
-/* จัดแถวนั่ง 3 คน (แถวที่ 1) */
-.triple:nth-child(3n) {
-    margin-right: 30px; /* เว้นทางเดินระหว่างกลุ่ม 3 คน */
-}
-.triple:nth-child(12n) {
-    margin-right: 5px; /* ตัวสุดท้ายไม่ต้องเว้นกว้าง */
-}
-
-/* จัดแถวนั่ง 2 คน (แถวที่ 2-4) */
-.double:nth-of-type(2n+12) { /* +12 เพื่อให้นับต่อจากแถวแรก */
-    margin-right: 40px; /* เว้นทางเดินระหว่างกลุ่ม 2 คน */
-}
-.double:nth-of-type(8n+12) {
-    margin-right: 5px; /* ตัวสุดท้ายของแถวไม่ต้องเว้นกว้าง */
+/* ทางเดินแนวตั้ง */
+.aisle {
+    width: 30px; /* ความกว้างของทางเดิน */
 }
 
 .seat.taken {
@@ -47,26 +29,6 @@ body {
 }
 
 .seat.selected {
-    border: 3px solid #f1c40f;
-}
-
-#booking-panel {
-    margin-top: 20px;
-}
-
-input {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-button#confirm-btn {
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
+    border: 3px solid gold;
 }
 
