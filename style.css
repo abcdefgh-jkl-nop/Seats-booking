@@ -1,26 +1,28 @@
+body {
+    font-family: 'Sarabun', sans-serif;
+    text-align: center;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
 #classroom-map {
     display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    max-width: 750px; /* ปรับให้พอดีกับ 12 ช่อง */
-    margin: 20px auto;
-    justify-content: center;
+    flex-direction: column; /* จัดแถวจากบนลงล่าง */
+    align-items: center;
+    margin: 30px auto;
 }
 
 .seat {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     margin: 3px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     background-color: #2ecc71;
     color: white;
+    font-weight: bold;
     cursor: pointer;
-}
-
-/* ทางเดินแนวตั้ง */
-.aisle {
-    width: 30px; /* ความกว้างของทางเดิน */
+    transition: 0.2s;
 }
 
 .seat.taken {
@@ -29,6 +31,31 @@
 }
 
 .seat.selected {
-    border: 3px solid gold;
+    box-shadow: 0 0 0 4px gold;
 }
 
+#booking-panel {
+    margin-top: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    display: inline-block;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+#confirm-btn {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
