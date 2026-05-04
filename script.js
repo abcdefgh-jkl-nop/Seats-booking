@@ -1,68 +1,56 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbwwoofCO-EJFkBxQyTjrj_IscT5HliIoYIeduo3afIcVUcbzXRzpzLxh2Lnwh6zbo_a/exec'; 
+const scriptURL = 'ใส่_URL_จาก_Apps_Script_ที่นี่'; 
 const container = document.getElementById('classroom-map');
 let selectedSeat = null;
 
 function createSeats() {
-    container.innerHTML = ''; // ล้างค่าเก่าก่อนสร้างใหม่
+    container.innerHTML = ''; 
     
-    // สร้างแถวที่ 1 (กลุ่มละ 3 คน, 4 กลุ่ม)
-    for (let i = 1; i <= 12; i++) {
-        makeButton(i, 'triple');
+    // ฟังก์ชันช่วยสร้างปุ่ม
+    function addSeat(id) {
+        const seat = document.createElement('button');
+        seat.innerText = id;
+        seat.id = 'seat-' + id;
+        seat.classList.add('seat');
+        seat.onclick = () => {
+            if (!seat.classList.contains('taken')) {
+                if (selectedSeat) selectedSeat.classList.remove('selected');
+                seat.classList.add('selected');
+                selectedSeat = seat;
+            }
+        };
+        container.appendChild(seat);
     }
-    
-    // สร้างแถวที่ 2-4 (กลุ่มละ 2 คน, 4 กลุ่ม)
-    for (let i = 13; i <= 36; i++) {
-        makeButton(i, 'double');
-    }
-}
 
-function makeButton(i, type) {
-    const seat = document.createElement('button');
-    seat.innerText = i;
-    seat.id = 'seat-' + i;
-    seat.classList.add('seat', type);
-    
-    seat.onclick = () => {
-        if (!seat.classList.contains('taken')) {
-            if (selectedSeat) selectedSeat.classList.remove('selected');
-            seat.classList.add('selected');
-            selectedSeat = seat;
+    // ฟังก์ชันช่วยสร้างช่องว่าง (ทางเดิน)
+    function addAisle() {
+        const aisle = document.createElement('div');
+        aisle.classList.add('aisle');
+        container.appendChild(aisle);
+    }
+
+    // --- แถวที่ 1 (3-3-3-3) ---
+    let seatNum = 1;
+    for (let group = 1; group <= 4; group++) {
+        for (let s = 1; s <= 3; s++) { addSeat(seatNum++); }
+        if (group < 4) addAisle(); // เว้นทางเดินยกเว้นกลุ่มสุดท้าย
+    }
+
+    // --- แถวที่ 2-4 (2-2-2-2) ---
+    for (let row = 1; row <= 3; row++) {
+        for (let group = 1; group <= 4; group++) {
+            // สร้างที่นั่ง 2 ตัว
+            for (let s = 1; s <= 2; s++) { addSeat(seatNum++); }
+            // สร้างที่ว่างหลอกๆ 1 ตัว (เพื่อให้ทางเดินตรงกับแถวบน)
+            const spacer = document.createElement('div');
+            spacer.style.width = '50px'; // เท่ากับความกว้างที่นั่ง
+            container.appendChild(spacer);
+            
+            if (group < 4) addAisle();
         }
-    };
-    container.appendChild(seat);
-}
-
-// ฟังก์ชันโหลดข้อมูล (คงเดิมไว้)
-function loadSeats() {
-    fetch(scriptURL)
-        .then(res => res.json())
-        .then(data => {
-            data.forEach(row => {
-                const seatBtn = document.getElementById('seat-' + row[0]);
-                if (seatBtn) {
-                    seatBtn.classList.add('taken');
-                    seatBtn.innerText = row[1];
-                }
-            });
-        });
-}
-
-function confirmBooking() {
-    const name = document.getElementById('student-name').value;
-    if (selectedSeat && name) {
-        const seatNumber = selectedSeat.id.replace('seat-', '');
-        fetch(scriptURL, {
-            method: 'POST',
-            body: JSON.stringify({ seat: seatNumber, name: name })
-        })
-        .then(() => {
-            alert('จองสำเร็จ!');
-            location.reload();
-        });
-    } else {
-        alert('กรุณาเลือกที่นั่งและใส่ชื่อครับ');
     }
 }
 
+// ... ส่วนฟังก์ชัน loadSeats และ confirmBooking ก๊อปของเดิมมาวางต่อท้ายได้เลยครับ ...
 createSeats();
 loadSeats();
+
