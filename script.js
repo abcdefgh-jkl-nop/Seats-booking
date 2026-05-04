@@ -6,21 +6,22 @@ function createSeats() {
     container.innerHTML = ''; 
     let seatNum = 1;
 
-    // สร้างทั้งหมด 4 แถวแนวนอนตามรูปวาด
+    // สร้างทั้งหมด 4 แถวแนวนอน
     for (let r = 1; r <= 4; r++) {
         const rowDiv = document.createElement('div');
         rowDiv.style.display = 'flex';
         rowDiv.style.justifyContent = 'center';
-        rowDiv.style.marginBottom = '15px'; // ระยะห่างระหว่างแถวหน้า-หลัง
+        rowDiv.style.marginBottom = '15px';
         rowDiv.style.width = '100%';
 
-        // ใน 1 แถวแนวนอน มี 4 กลุ่มหน้ากระดาน
+        // ใน 1 แถว มี 4 กลุ่มหน้ากระดาน
         for (let g = 1; g <= 4; g++) {
             const groupDiv = document.createElement('div');
             groupDiv.style.display = 'flex';
-            groupDiv.style.marginRight = (g < 4) ? '40px' : '0'; // ทางเดินระหว่างกลุ่ม
+            // เว้นทางเดินระหว่างกลุ่ม 40px
+            groupDiv.style.marginRight = (g < 4) ? '40px' : '0'; 
 
-            // เงื่อนไข: ถ้ากลุ่มที่ 1 (ซ้ายสุด) ให้มี 3 ที่นั่ง นอกนั้น 2 ที่นั่ง
+            // ล็อคว่ากลุ่มที่ 1 ต้องมี 3 ที่นั่งเสมอ และกลุ่ม 2,3,4 มี 2 ที่นั่งเสมอ
             let seatsInGroup = (g === 1) ? 3 : 2;
 
             for (let s = 1; s <= seatsInGroup; s++) {
@@ -37,6 +38,9 @@ function createSeats() {
                 };
                 groupDiv.appendChild(seat);
                 seatNum++;
+                
+                // หยุดถ้าครบ 36 ที่นั่ง
+                if (seatNum > 36) break;
             }
             rowDiv.appendChild(groupDiv);
         }
@@ -44,7 +48,6 @@ function createSeats() {
     }
 }
 
-// ฟังก์ชัน loadSeats และ confirmBooking (เหมือนเดิม)
 function loadSeats() {
     fetch(scriptURL).then(res => res.json()).then(data => {
         data.forEach(row => {
