@@ -1,4 +1,4 @@
-const scriptURL = 'ใส่_URL_จาก_Apps_Script_ที่นี่'; 
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyJhKFDX3x8rFdbSgzIwXGaxC-5A_zuUBkCl_dx07jgoeWtp86zvfEB_jLI9OCcahkH/exec'; 
 const container = document.getElementById('classroom-map');
 let selectedSeat = null;
 
