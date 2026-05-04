@@ -7,7 +7,7 @@ body {
 
 #classroom-map {
     display: flex;
-    flex-direction: column; /* จัดแถวจากบนลงล่าง */
+    flex-direction: column;
     align-items: center;
     margin: 30px auto;
 }
@@ -22,7 +22,6 @@ body {
     color: white;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.2s;
 }
 
 .seat.taken {
@@ -36,26 +35,4 @@ body {
 
 #booking-panel {
     margin-top: 20px;
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    display: inline-block;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    outline: none;
-}
-
-#confirm-btn {
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
 }
