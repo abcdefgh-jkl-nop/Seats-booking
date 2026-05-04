@@ -18,8 +18,8 @@ function loadSeats() {
         });
 }
 
-// 2. สร้างที่นั่ง 25 ที่
-for (let i = 1; i <= 25; i++) {
+// 2. สร้างที่นั่ง 36 ที่
+for (let i = 1; i <= 36; i++) {
     const seat = document.createElement('button');
     seat.innerText = i;
     seat.id = 'seat-' + i;
