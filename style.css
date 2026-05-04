@@ -1,13 +1,16 @@
 /* style.css */
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr); /* สมมติว่ามี 5 คอลัมน์ */
-    gap: 15px;
-    padding: 20px;
-    max-width: 500px;
-    margin: 0 auto;
+    display: grid;/* แถวละ12ที่นั่ง(มาจาก3คน*4กลุ่ม)*/
+    grid-template-columns: repeat(12, 1fr); /* สมมติว่ามี 5 คอลัมน์ */
+    gap: 10px;/* เพิ่มระยะห่างพิเศษระหว่างกลุ่มที่ 3,6,9เพื่อให้ดูแยกเป็น4กลุ่มชัดเจน*/
+    padding: 15px;
+    max-width: 900px;/*ขยายตวามกว้างหน้าจอให้รองรับ12ที่นั่ง*/
+    margin:  20px auto;
 }
-
+/*ถ้าอยากให้เว้นช่องว่างระหว่างกลุ่ม3ที่นั่งให้ชัดขึ้น(optionเสริม)*/
+.seat: nth-child(3n) {
+    margin-right: 20px;
+}
 .seat {
     width: 60px;
     height: 60px;
